@@ -1219,13 +1219,24 @@ int dolisten( int portno )
 
 Session* sessionSockMap[32000]; // array of SMPP session by socket
 
-int main(int argc, const char * argv[])
+int main(int argc, char * argv[])
 {
     printf("%s build time: %s %s\n",argv[0],__DATE__,__TIME__);
     
     //
     
     int portSMPP = 2775;
+    
+    int opt;
+    extern char *optarg;
+    while ((opt = getopt(argc, argv, "p:")) != -1) {
+        switch (opt) {
+        case 'p': portSMPP = atoi(optarg); break;
+        default:
+            fprintf(stderr, "Usage: %s [-p] [port]\n", argv[0]);
+            exit(EXIT_FAILURE);
+        }
+    }
     
     int listensockfdSMPP = dolisten(portSMPP);
     
